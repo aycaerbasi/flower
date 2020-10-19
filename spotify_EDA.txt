@@ -1,0 +1,49 @@
+from google.colab import files
+
+uploaded = files.upload()
+
+import pandas as pd 
+import io 
+import numpy as np
+  
+df = pd.read_csv(io.BytesIO(uploaded['spotify_data.csv'])) 
+df = df.drop("Unnamed: 0", axis="columns")
+df.head()
+
+import matplotlib.pyplot as plot
+import seaborn as sns
+import matplotlib.ticker as ticker
+from sklearn.linear_model import LinearRegression
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.manifold import TSNE
+
+%matplotlib inline
+
+corr = df.corr()
+fig1 = plot.figure(figsize=(16, 8))
+sns.heatmap(df.corr(), annot=True, annot_kws={'weight':'bold'},linewidths=.5, cmap='RdPu')
+
+sns.lmplot(y='loudness',x='energy',data=df, hue='target',palette='RdPu')
+
+sns.lmplot(y='loudness',x='energy',data=df, hue='target',palette='RdPu')
+
+hit_danceability = df[df['target']==1]['danceability']
+flop_danceability = df[df['target']==0]['danceability']
+
+palette = sns.color_palette("husl", 2)
+fig = plot.figure(figsize=(12,12))
+plot.title("Danceability")
+
+hit_danceability.hist(alpha = 0.7, bins = 30, label = 'hit')
+flop_danceability.hist(alpha = 0.7, bins = 30, label = 'flop')
+plot.legend()
+
+df.sort_values('instrumentalness', axis = 0, ascending = False).head(10)[["instrumentalness","song_title","artist;",]]
+
+from collections import Counter
+c = Counter(df['artist;'])
+c.most_common(10)
+
+df[(df['artist;'] == "Drake;")].sort_values('tempo', axis = 0, ascending=False)
+
